@@ -15,8 +15,9 @@ class Game {
 
     start() {
         this.stateMap = this.createMap(this.fieldSize, this.colorsArray);
-        this.createControls(this.colorsArray);
+        this.table = this.createTable(this.stateMap.length);
 
+        this.createControls(this.colorsArray);
 
         this.areaWrapper.appendChild(this.table);
     }
@@ -69,6 +70,29 @@ class Game {
         }
         return tableMap;
     }
+
+    /* Рендерит пустое игровое поле без цветов */
+    createTable(size) {
+        let $table = document.createElement('table'),
+            row = document.createElement('tr'),
+            cell = document.createElement('td');
+
+        $table.classList.add('table');
+        row.classList.add('row');
+        cell.classList.add('cell');
+        cell.dataset.block = false;
+
+        row.style.height = 100 / size + '%';
+
+        for (let i = 0; i < size; i++) {
+            $table.appendChild(row.cloneNode());
+            for (let j = 0; j < size; j++) {
+                $table.rows[i].appendChild(cell.cloneNode());
+            }
+        }
+        return $table;
+    }
+
 }
 
 const game = new Game(options);
