@@ -14,6 +14,8 @@ class Game {
         this.createControls(this.colorsArray);
 
         this.areaWrapper.appendChild(this.table);
+
+        return this;
     }
 
     createColorsArray(colorsCount) {
@@ -112,15 +114,19 @@ class Game {
         this.updateDomTable(this.table, this.stateMap);
     }
 
-    matcher(row, cell, color) {
+    matcher(row, cell, color, matches = {}) {
         if (cell >= this.stateMap.length) return;
         if (row >= this.stateMap.length) return;
 
         if (this.stateMap[row][cell].color === color) {
             this.stateMap[row][cell].block = true;
-            this.matcher(row, cell + 1, color);
-            this.matcher(row + 1, cell, color);
+            this.matcher(row, cell + 1, color, matches);
+            this.matcher(row + 1, cell, color, matches);
         } else {
+            matches[this.stateMap[row][cell].color] ?
+                matches[this.stateMap[row][cell].color]++ :
+                matches[this.stateMap[row][cell].color] = 1;
+
             return;
         }
     }
@@ -131,7 +137,6 @@ class Game {
         this.stateMap[0][0].color = color;
         this.matcher(0, 0, this.stateMap[0][0].color);
 
-
         for (let row = 0; row < this.stateMap.length; row++) {
             for (let cell = 0; cell < this.stateMap.length; cell++) {
                 if (this.stateMap[row][cell].block) {
@@ -140,12 +145,55 @@ class Game {
             }
         }
     }
+
+    checkWin() {
+        const color = this.stateMap[0][0].color;
+        const win = this.stateMap.every(function (row) {
+            return row.every(function (cell) {
+                return cell.color === color;
+            });
+        });
+        return win;
+    }
+
+    botAI(stepTime) {
+        const autoGame = setInterval(game.bind(this), stepTime);
+
+        function game() {
+            if (this.checkWin()) {
+                console.log('WIN');
+                clearInterval(autoGame);
+            } else {
+                const matches = {};
+                this.matcher(0, 0, this.stateMap[0][0].color, matches);
+
+                const color = function () {
+                    let max = 0,
+                        target = '';
+                    for (let color in matches) {
+                        if (matches[color] > max) {
+                            max = matches[color];
+                            target = color;
+                        }
+                    }
+
+                    return target;
+                }();
+
+                this.tileMatcher(color);
+                this.updateDomTable(this.table, this.stateMap);
+            }
+        };
+    }
 }
 
-const startButton = document.getElementById('gameStart');
-startButton.addEventListener('click', gameStart);
+const startButton = document.getElementById('gameStart'),
+    botButton = document.getElementById('botStart');
 
-function gameStart() {
+startButton.addEventListener('click', gameStart);
+botButton.addEventListener('click', botGame);
+
+function gameInit() {
     const options = {
         gameArea: document.getElementById('gameArea'),
         controls: document.getElementById('gameControls'),
@@ -154,6 +202,16 @@ function gameStart() {
     },
         game = new Game(options);
 
-    game.start();
+    options.gameArea.innerHTML = '';
+    options.controls.innerHTML = '';
+
+    return game;
 }
 
+function gameStart() {
+    gameInit().start();
+}
+
+function botGame() {
+    gameInit().start().botAI(200);
+}
