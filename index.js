@@ -45,7 +45,7 @@ class Game {
         for (let color of colors) {
             elem.dataset.color = color;
             elem.style.backgroundColor = color;
-            list.appendChild(elem.cloneNode(true));
+            list.appendChild(elem.cloneNode(true)).addEventListener('click', this.controlClick.bind(this));
         }
         this.controlsWrapper.appendChild(list);
     }
@@ -55,7 +55,7 @@ class Game {
       По ней будет совершаться поиск сопряженных элементов, отталкиваясь от меток внутри неё
       будет перекрашиваться поле.
       DOM - дерево обновляется только после того, как будет обработана карта.
-  */
+    */
     createMap(size, colors) {
         let tableMap;
         tableMap = new Array(size);
@@ -111,6 +111,37 @@ class Game {
 
     randomValue(min, max) {
         return Math.floor(Math.random() * (max - min) + min);
+    }
+
+    controlClick(event) {
+        let color = event.target.dataset.color;
+        this.tileMatcher(color);
+        this.updateDomTable(this.table, this.stateMap);
+    }
+
+    matcher(row, cell, color) {
+        if (cell >= this.stateMap.length) return;
+        if (row >= this.stateMap.length) return;
+
+        this.matcher(row, cell + 1, color);
+        this.matcher(row + 1, cell, color);
+
+        if (this.stateMap[row][cell].color === color) {
+            this.stateMap[row][cell].block = true;
+        }
+    }
+
+    tileMatcher(color) {
+        this.stateMap[0][0].color = color;
+        this.matcher(0, 0, color);
+
+        for (let row = 0; row < this.stateMap.length; row++) {
+            for (let cell = 0; cell < this.stateMap.length; cell++) {
+                if (this.stateMap[row][cell].block) {
+                    this.stateMap[row][cell].color = color;
+                }
+            }
+        }
     }
 }
 
