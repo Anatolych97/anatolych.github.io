@@ -72,13 +72,19 @@ body {
     border: none;
     padding: 10px;
 }
-
+.gameButton {
+    border: none;
+    padding: 10px 0;
+    cursor: pointer;
+}
 .gameOptionsStart {
     width: 100%;
     background-color: #fff;
-    padding: 10px 0;
-    border: none;
     margin: 20px 0;
+}
+
+.gameOptionsAI {
+    background-color: #fff;
 }
 
 /* --------------------------- Game controls  --------------------------- */
