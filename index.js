@@ -17,6 +17,7 @@ class Game {
         this.stateMap = this.createMap(this.fieldSize, this.colorsArray);
         this.table = this.createTable(this.stateMap.length);
 
+        this.updateDomTable(this.table, this.stateMap);
         this.createControls(this.colorsArray);
 
         this.areaWrapper.appendChild(this.table);
@@ -93,6 +94,24 @@ class Game {
         return $table;
     }
 
+    /*
+        Функция заливки поля.
+        Единственная роль это обновить дерево на основании карты игры.
+        ВАЖНО: Чистое обновление цветов, никаких побочных действий или условий!
+    */
+    updateDomTable(table, map) {
+        for (let row of table.rows) {
+            for (let cell of row.cells) {
+                cell.dataset.color = map[row.rowIndex][cell.cellIndex]['color'];
+                cell.dataset.block = map[row.rowIndex][cell.cellIndex]['block'];
+                cell.style.backgroundColor = map[row.rowIndex][cell.cellIndex]['color'];
+            }
+        }
+    }
+
+    randomValue(min, max) {
+        return Math.floor(Math.random() * (max - min) + min);
+    }
 }
 
 const game = new Game(options);
