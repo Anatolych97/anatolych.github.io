@@ -1,10 +1,3 @@
-let options = {
-    gameArea: document.getElementById('gameArea'),
-    controls: document.getElementById('gameControls'),
-    colorsCount: +document.getElementById('colors').value,
-    fieldSize: +document.getElementById('fieldSize').value,
-}
-
 class Game {
     constructor(options) {
         this.areaWrapper = options.gameArea;
@@ -123,17 +116,21 @@ class Game {
         if (cell >= this.stateMap.length) return;
         if (row >= this.stateMap.length) return;
 
-        this.matcher(row, cell + 1, color);
-        this.matcher(row + 1, cell, color);
-
         if (this.stateMap[row][cell].color === color) {
             this.stateMap[row][cell].block = true;
+            this.matcher(row, cell + 1, color);
+            this.matcher(row + 1, cell, color);
+        } else {
+            return;
         }
     }
 
     tileMatcher(color) {
+        this.matcher(0, 0, this.stateMap[0][0].color);
+
         this.stateMap[0][0].color = color;
-        this.matcher(0, 0, color);
+        this.matcher(0, 0, this.stateMap[0][0].color);
+
 
         for (let row = 0; row < this.stateMap.length; row++) {
             for (let cell = 0; cell < this.stateMap.length; cell++) {
@@ -145,5 +142,18 @@ class Game {
     }
 }
 
-const game = new Game(options);
-game.start();
+const startButton = document.getElementById('gameStart');
+startButton.addEventListener('click', gameStart);
+
+function gameStart() {
+    const options = {
+        gameArea: document.getElementById('gameArea'),
+        controls: document.getElementById('gameControls'),
+        colorsCount: +document.getElementById('colors').value,
+        fieldSize: +document.getElementById('fieldSize').value,
+    },
+        game = new Game(options);
+
+    game.start();
+}
+
