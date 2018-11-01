@@ -1,0 +1,86 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #ddd;
+}
+
+.title {
+    font-size: 30px;
+    text-align: center;
+}
+
+.game {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.gameOptions {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: start;
+    align-items: flex-start;
+    margin: 50px;
+}
+
+.inputLabel {
+    margin: 20px 0 0 0;
+}
+
+.input {
+    display: inline-block;
+}
+
+.gameControls {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.gameControlsList {
+    list-style: none;
+}
+
+.gameControlsElement {
+    display: inline-block;
+    width: 80px;
+    height: 25px;
+    margin: 20px;
+    cursor: pointer;
+    transition: all .3s linear;
+}
+
+.gameControlsElement:hover {
+    transform: scale(1.2);
+}
+
+.area {
+    width: 500px;
+    height: 500px;
+    background-color: #555;
+}
+
+.table {
+    height: 100%;
+    width: 100%;
+}
+
+.row {
+    width: 100%;
+}
+
+.cell {
+    border: 1px solid transparent;
+    transition: all .2s ease;
+    cursor: pointer;
+}
+
+.cell:hover {
+    transform: scale(1.1);
+}
