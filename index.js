@@ -14,7 +14,7 @@ class Game {
     }
 
     start() {
-
+        this.stateMap = this.createMap(this.fieldSize, this.colorsArray);
         this.createControls(this.colorsArray);
 
 
@@ -46,6 +46,28 @@ class Game {
             list.appendChild(elem.cloneNode(true));
         }
         this.controlsWrapper.appendChild(list);
+    }
+
+    /*
+      Создает карту поля. Изначально все действия совершаются над этой картой.
+      По ней будет совершаться поиск сопряженных элементов, отталкиваясь от меток внутри неё
+      будет перекрашиваться поле.
+      DOM - дерево обновляется только после того, как будет обработана карта.
+  */
+    createMap(size, colors) {
+        let tableMap;
+        tableMap = new Array(size);
+        for (let rowIndex = 0; rowIndex < tableMap.length; rowIndex++) {
+            tableMap[rowIndex] = new Array(size);
+            for (let cellIndex = 0; cellIndex < tableMap[rowIndex].length; cellIndex++) {
+                let hash = this.randomValue(0, colors.length);
+                tableMap[rowIndex][cellIndex] = {
+                    color: colors[hash],
+                    block: false
+                }
+            }
+        }
+        return tableMap;
     }
 }
 
