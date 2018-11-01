@@ -17,28 +17,34 @@
 
     <div class="game">
         <div class="gameOptions">
-
-            <label class="inputLabel"> Row count
-                <input class="input"
+            <p class="gameOptionsElement">
+                <label class="gameOptionsElementLabel">Field size</label>
+                <input class="gameOptionsElementInput"
                        type="number"
                        id="fieldSize"
-                       value="10">
-            </label>
-
-            <label class="inputLabel"> Color count
-                <input class="input"
+                       value="10"
+                       max="40"
+                       min="2">
+            </p>
+            <p class="gameOptionsElement">
+                <label class="gameOptionsElementLabel">Color count</label>
+                <input class="gameOptionsElementInput"
                        type="number"
                        id="colors"
-                       value="5">
-            </label>
+                       value="10"
+                       max="40"
+                       min="2">
+            </p>
 
+            <button class="gameOptionsStart"
+                    id="gameStart">Start</button>
         </div>
         <div id="gameArea"
              class="area">
 
         </div>
         <div id="gameControls"
-             class="">
+             class="gameControls">
 
         </div>
     </div>
