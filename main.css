@@ -8,6 +8,8 @@ body {
     background-color: #ddd;
 }
 
+
+/* --------------------------- Game field  --------------------------- */
 .title {
     font-size: 30px;
     text-align: center;
@@ -20,55 +22,17 @@ body {
     justify-content: center;
 }
 
-.gameOptions {
-    display: flex;
-    flex-flow: column wrap;
-    justify-content: start;
-    align-items: flex-start;
-    margin: 50px;
-}
-
-.inputLabel {
-    margin: 20px 0 0 0;
-}
-
-.input {
-    display: inline-block;
-}
-
-.gameControls {
-    display: flex;
-    flex-flow: column wrap;
-    justify-content: center;
-    align-items: center;
-}
-
-.gameControlsList {
-    list-style: none;
-}
-
-.gameControlsElement {
-    display: inline-block;
-    width: 80px;
-    height: 25px;
-    margin: 20px;
-    cursor: pointer;
-    transition: all .3s linear;
-}
-
-.gameControlsElement:hover {
-    transform: scale(1.2);
-}
-
 .area {
-    width: 500px;
-    height: 500px;
+    width: 40vw;
+    height: 40vw ;
     background-color: #555;
 }
 
 .table {
     height: 100%;
     width: 100%;
+    border: 2px solid #555;
+    box-shadow: 2px 2px 30px 5px rgba(0, 0, 0, 0.5);
 }
 
 .row {
@@ -83,4 +47,63 @@ body {
 
 .cell:hover {
     transform: scale(1.1);
+}
+
+/* --------------------------- Game options  --------------------------- */
+.gameOptions {
+    display: flex;
+    flex-flow: column wrap;
+    margin: 50px 0;
+}
+.gameOptionsElement {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: baseline;
+}
+
+.gameOptionsElementLabel {
+    display: block;
+    width: 200px;
+    margin: 20px 0 0 0;
+    text-transform: uppercase;
+}
+
+.gameOptionsElementInput {
+    border: none;
+    padding: 10px;
+}
+
+.gameOptionsStart {
+    width: 100%;
+    background-color: #fff;
+    padding: 10px 0;
+    border: none;
+    margin: 20px 0;
+}
+
+/* --------------------------- Game controls  --------------------------- */
+.gameControls {
+    max-width: 40vw;
+}
+
+.gameControlsList {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+    list-style: none;
+}
+
+.gameControlsElement {
+    display: inline-block;
+    width: 80px;
+    height: 25px;
+    margin: 10px;
+    cursor: pointer;
+    transition: all .3s linear;
+}
+
+.gameControlsElement:hover {
+    transform: scale(1.2);
 }
