@@ -25,12 +25,12 @@ class Game {
 
     createColorsArray(colorsCount) {
         const colors = [];
-        const randHEX = function () {
-            return (this.randomValue(0, 255)).toString(16);
+        const randColor = function () {
+            return (this.randomValue(0, 255));
         }.bind(this);
 
         for (let i = 0; i < colorsCount; i++) {
-            colors.push('#' + randHEX() + randHEX() + randHEX());
+            colors.push(`rgb(${randColor()},${randColor()},${randColor()})`);
         }
         return colors;
     }
