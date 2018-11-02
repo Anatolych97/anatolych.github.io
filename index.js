@@ -4,6 +4,7 @@ class Game {
         this.controlsWrapper = options.controls;
         this.colorsArray = this.createColorsArray(options.colorsCount);
         this.fieldSize = options.fieldSize;
+        this.once = true;
     }
 
     start() {
@@ -110,36 +111,51 @@ class Game {
 
     controlClick(event) {
         let color = event.target.dataset.color;
-        this.tileMatcher(color);
+
+        this.matcher(0, 0, this.stateMap[0][0].color);
+
+        this.stateMap[0][0].color = color;
+        this.matcher(0, 0, color);
+
+        this.mapCellsUpdate(color);
         this.updateDomTable(this.table, this.stateMap);
     }
 
     matcher(row, cell, color, matches = {}) {
-        if (cell >= this.stateMap.length) return;
-        if (row >= this.stateMap.length) return;
+        if (cell >= this.stateMap.length || cell < 0) return;
+        if (row >= this.stateMap.length || row < 0) return;
+        if (this.stateMap[row][cell].used) return;
 
         if (this.stateMap[row][cell].color === color) {
             this.stateMap[row][cell].block = true;
+            this.stateMap[row][cell].used = true;
+
+            this.table.rows[row].cells[cell].dataset.used = true;
+            this.table.rows[row].cells[cell].dataset.block = true;
+
             this.matcher(row, cell + 1, color, matches);
             this.matcher(row + 1, cell, color, matches);
-        } else {
+
+            if (cell > 0) {
+                this.matcher(row, cell - 1, color, matches);
+            }
+            if (row > 0) {
+                this.matcher(row - 1, cell, color, matches);
+            }
+        }
+        if (this.stateMap[row][cell].color !== color) {
             matches[this.stateMap[row][cell].color] ?
                 matches[this.stateMap[row][cell].color]++ :
                 matches[this.stateMap[row][cell].color] = 1;
-
             return;
         }
     }
 
-    tileMatcher(color) {
-        this.matcher(0, 0, this.stateMap[0][0].color);
-
-        this.stateMap[0][0].color = color;
-        this.matcher(0, 0, this.stateMap[0][0].color);
-
+    mapCellsUpdate(color) {
         for (let row = 0; row < this.stateMap.length; row++) {
             for (let cell = 0; cell < this.stateMap.length; cell++) {
                 if (this.stateMap[row][cell].block) {
+                    this.stateMap[row][cell].used = false;
                     this.stateMap[row][cell].color = color;
                 }
             }
@@ -147,12 +163,12 @@ class Game {
     }
 
     checkWin() {
-        const color = this.stateMap[0][0].color;
-        const win = this.stateMap.every(function (row) {
-            return row.every(function (cell) {
-                return cell.color === color;
+        const color = this.stateMap[0][0].color,
+            win = this.stateMap.every(function (row) {
+                return row.every(function (cell) {
+                    return cell.color === color;
+                });
             });
-        });
         return win;
     }
 
@@ -180,7 +196,7 @@ class Game {
                     return target;
                 }();
 
-                this.tileMatcher(color);
+                this.mapCellsUpdate(color);
                 this.updateDomTable(this.table, this.stateMap);
             }
         };
@@ -194,24 +210,32 @@ startButton.addEventListener('click', gameStart);
 botButton.addEventListener('click', botGame);
 
 function gameInit() {
+
     const options = {
         gameArea: document.getElementById('gameArea'),
         controls: document.getElementById('gameControls'),
         colorsCount: +document.getElementById('colors').value,
         fieldSize: +document.getElementById('fieldSize').value,
-    },
-        game = new Game(options);
+    };
 
     options.gameArea.innerHTML = '';
     options.controls.innerHTML = '';
 
-    return game;
+    return new Game(options);
 }
 
 function gameStart() {
-    gameInit().start();
+    const game = gameInit();
+
+    if (game) {
+        game.start();
+    }
 }
 
 function botGame() {
-    gameInit().start().botAI(200);
+    const game = gameInit();
+
+    if (game) {
+        game.start().botAI(300);
+    }
 }
