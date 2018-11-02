@@ -93,6 +93,15 @@ body {
     background-color: #fff;
 }
 
+.errorsList {
+    list-style: none;
+    align-self: flex-end;
+    margin: 10px 0;
+}
+.errorsListItem {
+    color: #f00;
+}
+
 /* --------------------------- Game controls  --------------------------- */
 .gameControls {
     max-width: 40vw;
