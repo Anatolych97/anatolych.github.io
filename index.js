@@ -179,7 +179,7 @@ class Game {
 
         function game() {
             if (this.checkWin()) {
-                console.log('WIN');
+                showBaner('success', 'WIN', 'You are winner!');
                 clearInterval(autoGame);
             } else {
                 const matches = {};
@@ -314,7 +314,7 @@ function gameInit() {
 
         return new Game(options);
     } else {
-
+        showBaner('error', 'Erorr in options', 'You should input correctly value for start game');
     }
 }
 
@@ -327,4 +327,22 @@ function gameStart({ target }) {
             game.start();
         }
     }
+}
+
+function showBaner(type, title, message) {
+    let wrapper = document.querySelector('.banerWrapper'),
+        baner = document.querySelector('.baner'),
+        button = document.querySelector('.banerClose'),
+        banerTitle = document.querySelector('.banerTitle'),
+        banerText = document.querySelector('.banerText');
+
+    baner.classList.add('baner', type);
+    banerTitle.textContent = title;
+    banerText.textContent = message;
+
+    wrapper.style.display = 'flex';
+
+    button.addEventListener('click', function () {
+        wrapper.style.display = 'none';
+    });
 }

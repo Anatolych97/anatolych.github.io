@@ -6,12 +6,13 @@
 
 body {
     background-color: #ddd;
+    position: relative;
 }
 
 
 /* --------------------------- Game field  --------------------------- */
 .title {
-    margin: 20px 0 0 0;
+    padding: 20px 0 0 0;
     font-size: 30px;
     text-align: center;
 }
@@ -130,4 +131,56 @@ body {
 
 .gameControlsElement:hover {
     transform: scale(1.2);
+}
+
+/* --------------------------- Banner  --------------------------- */
+.banerWrapper {
+    display: none;
+    flex-flow: row;
+    align-items: center;
+    justify-content: center;
+
+    position: fixed;
+    overflow: hidden;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(85, 85, 85, 0.5);
+}
+.baner {
+    position: relative;
+
+
+    width: 25vw;
+    padding: 20px;
+    background-color: #ddd;
+}
+.banerClose {
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+
+    text-align: center;
+
+    color: #fff;
+    background-color: #000;
+    cursor: pointer;
+}
+.baner.error {
+    border: 2px solid #f00;
+}
+.baner.success {
+    border: 2px solid #0f0;
+}
+.banerTitle {
+    text-align: center;
+    margin-bottom: 10px;
+}
+.banerText {
+    margin: 0 20px;
+    text-align: center;
 }
