@@ -11,6 +11,7 @@ body {
 
 /* --------------------------- Game field  --------------------------- */
 .title {
+    margin: 20px 0 0 0;
     font-size: 30px;
     text-align: center;
 }
@@ -59,7 +60,7 @@ body {
 .gameOptions {
     display: flex;
     flex-flow: column wrap;
-    margin: 50px 0;
+    margin: 30px 0;
 }
 .gameOptionsElement {
     display: flex;
@@ -67,22 +68,24 @@ body {
     align-items: baseline;
 }
 
-.gameOptionsElementLabel {
+.gameOptionsLabel {
     display: block;
     width: 200px;
     margin: 20px 0 0 0;
     text-transform: uppercase;
 }
 
-.gameOptionsElementInput {
+.gameOptionsInput {
     border: none;
     padding: 10px;
 }
+
 .gameButton {
     border: none;
     padding: 10px 0;
     cursor: pointer;
 }
+
 .gameOptionsStart {
     width: 100%;
     background-color: #fff;
