@@ -16,7 +16,9 @@
     <h1 class="title">Fillbot</h1>
 
     <div class="game">
-        <div class="gameOptions">
+        <form action="#"
+              id="gameOptions"
+              class="gameOptions">
             <p class="gameOptionsElement">
                 <label class="gameOptionsElementLabel">Field size</label>
                 <input class="gameOptionsElementInput"
@@ -24,7 +26,8 @@
                        id="fieldSize"
                        value="10"
                        max="40"
-                       min="3">
+                       min="3"
+                       required>
             </p>
             <p class="gameOptionsElement">
                 <label class="gameOptionsElementLabel">Color count</label>
@@ -33,14 +36,19 @@
                        id="colors"
                        value="10"
                        max="40"
-                       min="2">
+                       min="2"
+                       required>
             </p>
 
-            <button class="gameButton gameOptionsStart"
-                    id="gameStart">Start</button>
-            <button class="gameButton gameOptionsAI"
+            <button type="button"
+                    class="gameButton gameOptionsStart"
+                    id="gameStart"
+                    data-auto-game="">Start</button>
+            <button type="button"
+                    class="gameButton gameOptionsAI"
+                    data-auto-game="true"
                     id="botStart">AI Start</button>
-        </div>
+        </form>
         <div id="gameArea"
              class="area">
 

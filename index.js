@@ -204,38 +204,125 @@ class Game {
 }
 
 const startButton = document.getElementById('gameStart'),
-    botButton = document.getElementById('botStart');
+    botButton = document.getElementById('botStart'),
+    colorsInput = document.getElementById('colors'),
+    fieildSizeInput = document.getElementById('fieldSize'),
+    gameOptions = document.getElementById('gameOptions'),
+    validator = new Validator();
 
 startButton.addEventListener('click', gameStart);
-botButton.addEventListener('click', botGame);
+botButton.addEventListener('click', gameStart);
+colorsInput.addEventListener('focusout', validator.colorsCountValidate);
+fieildSizeInput.addEventListener('focusout', validator.fieldSizeValidate);
 
-function gameInit() {
+function Validator() {
 
-    const options = {
-        gameArea: document.getElementById('gameArea'),
-        controls: document.getElementById('gameControls'),
-        colorsCount: +document.getElementById('colors').value,
-        fieldSize: +document.getElementById('fieldSize').value,
-    };
+    function colorsCountValidate({ target: element }) {
+        let errors = [];
 
-    options.gameArea.innerHTML = '';
-    options.controls.innerHTML = '';
+        if (element.value > 20) {
+            errors.push('Too much colors');
+        }
 
-    return new Game(options);
-}
+        if (element.value < 3) {
+            errors.push(' It\'s to easy =)');
+        }
 
-function gameStart() {
-    const game = gameInit();
+        errorChecker(element, errors);
+    }
+    function fieldSizeValidate({ target: element }) {
+        let errors = [];
 
-    if (game) {
-        game.start();
+        if (element.value > 50) {
+            errors.push('Maximum value: 50');
+        }
+
+        if (element.value < 3) {
+            errors.push('Minimum value: 3');
+        }
+
+        errorChecker(element, errors);
+    }
+
+    function errorChecker(element, errors) {
+        if (errors.length > 0) {
+            showError(element, errors);
+            element.validity.valid = false;
+        } else {
+            errors.length = 0;
+            element.validity.valid = true;
+            clearErrors(element);
+        }
+    }
+    function showError(elem, errorsArray) {
+        clearErrors(elem);
+
+        const ul = document.createElement('ul'),
+            li = document.createElement('li');
+
+        ul.classList.add('errorsList');
+        li.classList.add('errorsListItem');
+
+        for (let error = 0; error < errorsArray.length; error++) {
+            li.textContent = errorsArray[error];
+            ul.appendChild(li.cloneNode(true));
+        }
+
+        elem.parentElement.insertAdjacentElement('afterEnd', ul);
+    }
+    function clearErrors(elem) {
+        if (elem.parentElement.nextElementSibling && elem.parentElement.nextElementSibling.classList.contains('errorsList')) {
+            elem.parentElement.nextElementSibling.remove();
+        }
+    }
+
+    function checkGlobalValid(gameOptions) {
+        let valid = true;
+        for (let elem of gameOptions) {
+            valid &= elem.validity.valid;
+        }
+
+        return valid;
+    }
+
+    return {
+        checkGlobalValid,
+        colorsCountValidate,
+        fieldSizeValidate
     }
 }
 
-function botGame() {
-    const game = gameInit();
+function buttonControls(flag) {
+    startButton.disabled = flag;
+    botButton.disabled = flag;
+}
 
+function gameInit() {
+
+    if (validator.checkGlobalValid(gameOptions)) {
+        const options = {
+            gameArea: document.getElementById('gameArea'),
+            controls: document.getElementById('gameControls'),
+            colorsCount: +document.getElementById('colors').value,
+            fieldSize: +document.getElementById('fieldSize').value,
+        };
+
+        options.gameArea.innerHTML = '';
+        options.controls.innerHTML = '';
+
+        return new Game(options);
+    } else {
+
+    }
+}
+
+function gameStart({ target }) {
+    const game = gameInit();
     if (game) {
-        game.start().botAI(300);
+        if (target.dataset.autoGame) {
+            game.start().botAI(300);
+        } else {
+            game.start();
+        }
     }
 }
