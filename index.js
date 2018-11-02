@@ -221,11 +221,11 @@ function Validator() {
         let errors = [];
 
         if (element.value > 20) {
-            errors.push('Too much colors');
+            errors.push('Max colors count: 20');
         }
 
         if (element.value < 3) {
-            errors.push(' It\'s to easy =)');
+            errors.push('Minimum colors count: 3');
         }
 
         errorChecker(element, errors);
