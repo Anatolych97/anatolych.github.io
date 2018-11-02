@@ -3,13 +3,15 @@ class Game {
         this.areaWrapper = options.gameArea;
         this.controlsWrapper = options.controls;
         this.colorsArray = this.createColorsArray(options.colorsCount);
-        this.fieldSize = options.fieldSize;
-        this.once = true;
+        this.fieldSize = {
+            rows: options.rowsCount,
+            columns: options.columnsCount
+        };
     }
 
     start() {
         this.stateMap = this.createMap(this.fieldSize, this.colorsArray);
-        this.table = this.createTable(this.stateMap.length);
+        this.table = this.createTable(this.fieldSize);
 
         this.updateDomTable(this.table, this.stateMap);
         this.createControls(this.colorsArray);
@@ -54,9 +56,9 @@ class Game {
     */
     createMap(size, colors) {
         let tableMap;
-        tableMap = new Array(size);
+        tableMap = new Array(size.rows);
         for (let rowIndex = 0; rowIndex < tableMap.length; rowIndex++) {
-            tableMap[rowIndex] = new Array(size);
+            tableMap[rowIndex] = new Array(size.columns);
             for (let cellIndex = 0; cellIndex < tableMap[rowIndex].length; cellIndex++) {
                 let hash = this.randomValue(0, colors.length);
                 tableMap[rowIndex][cellIndex] = {
@@ -79,11 +81,11 @@ class Game {
         cell.classList.add('cell');
         cell.dataset.block = false;
 
-        row.style.height = 100 / size + '%';
+        row.style.height = 100 / size.rows + '%';
 
-        for (let i = 0; i < size; i++) {
+        for (let i = 0; i < size.rows; i++) {
             $table.appendChild(row.cloneNode());
-            for (let j = 0; j < size; j++) {
+            for (let j = 0; j < size.columns; j++) {
                 $table.rows[i].appendChild(cell.cloneNode());
             }
         }
@@ -122,8 +124,8 @@ class Game {
     }
 
     matcher(row, cell, color, matches = {}) {
-        if (cell >= this.stateMap.length || cell < 0) return;
-        if (row >= this.stateMap.length || row < 0) return;
+        if (cell >= this.fieldSize.columns || cell < 0) return;
+        if (row >= this.fieldSize.rows || row < 0) return;
         if (this.stateMap[row][cell].used) return;
 
         if (this.stateMap[row][cell].color === color) {
@@ -153,7 +155,7 @@ class Game {
 
     mapCellsUpdate(color) {
         for (let row = 0; row < this.stateMap.length; row++) {
-            for (let cell = 0; cell < this.stateMap.length; cell++) {
+            for (let cell = 0; cell < this.stateMap[row].length; cell++) {
                 if (this.stateMap[row][cell].block) {
                     this.stateMap[row][cell].used = false;
                     this.stateMap[row][cell].color = color;
@@ -205,15 +207,14 @@ class Game {
 
 const startButton = document.getElementById('gameStart'),
     botButton = document.getElementById('botStart'),
-    colorsInput = document.getElementById('colors'),
-    fieildSizeInput = document.getElementById('fieldSize'),
     gameOptions = document.getElementById('gameOptions'),
     validator = new Validator();
 
 startButton.addEventListener('click', gameStart);
 botButton.addEventListener('click', gameStart);
-colorsInput.addEventListener('focusout', validator.colorsCountValidate);
-fieildSizeInput.addEventListener('focusout', validator.fieldSizeValidate);
+gameOptions['colors'].addEventListener('focusout', validator.colorsCountValidate);
+gameOptions['rows'].addEventListener('focusout', validator.fieldSizeValidate);
+gameOptions['columns'].addEventListener('focusout', validator.fieldSizeValidate);
 
 function Validator() {
 
@@ -303,8 +304,9 @@ function gameInit() {
         const options = {
             gameArea: document.getElementById('gameArea'),
             controls: document.getElementById('gameControls'),
-            colorsCount: +document.getElementById('colors').value,
-            fieldSize: +document.getElementById('fieldSize').value,
+            rowsCount: +gameOptions['rows'].value,
+            columnsCount: +gameOptions['columns'].value,
+            colorsCount: +gameOptions['colors'].value,
         };
 
         options.gameArea.innerHTML = '';

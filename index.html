@@ -20,20 +20,36 @@
               id="gameOptions"
               class="gameOptions">
             <p class="gameOptionsElement">
-                <label class="gameOptionsElementLabel">Field size</label>
+                <label class="gameOptionsElementLabel"
+                       for="rows">Row count</label>
                 <input class="gameOptionsElementInput"
                        type="number"
-                       id="fieldSize"
+                       id="rows"
+                       name="rows"
                        value="10"
                        max="40"
                        min="3"
                        required>
             </p>
             <p class="gameOptionsElement">
-                <label class="gameOptionsElementLabel">Color count</label>
+                <label class="gameOptionsElementLabel"
+                       for="columns">Column count</label>
+                <input class="gameOptionsElementInput"
+                       type="number"
+                       id="columns"
+                       name="columns"
+                       value="10"
+                       max="40"
+                       min="3"
+                       required>
+            </p>
+            <p class="gameOptionsElement">
+                <label class="gameOptionsElementLabel"
+                       for="colors">Color count</label>
                 <input class="gameOptionsElementInput"
                        type="number"
                        id="colors"
+                       name="colors"
                        value="10"
                        max="40"
                        min="2"
