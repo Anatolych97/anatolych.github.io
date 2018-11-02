@@ -23,9 +23,15 @@ body {
 }
 
 .area {
-    width: 40vw;
-    height: 40vw ;
+    width: 25vw;
+    height: 25vw ;
     background-color: #555;
+}
+ @media(max-width: 1024px) {
+    .area    {
+        width: 35vw;
+        height: 35vw;
+    }
 }
 
 .table {
