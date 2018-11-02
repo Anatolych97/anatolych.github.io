@@ -81,8 +81,6 @@ class Game {
         cell.classList.add('cell');
         cell.dataset.block = false;
 
-        row.style.height = 100 / size.rows + '%';
-
         for (let i = 0; i < size.rows; i++) {
             $table.appendChild(row.cloneNode());
             for (let j = 0; j < size.columns; j++) {
