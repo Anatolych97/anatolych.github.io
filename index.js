@@ -119,6 +119,10 @@ class Game {
 
         this.mapCellsUpdate(color);
         this.updateDomTable(this.table, this.stateMap);
+
+        if (this.checkWin()) {
+            showBaner('success', 'WIN', 'You are winner!');
+        }
     }
 
     matcher(row, cell, color, matches = {}) {
