@@ -438,6 +438,7 @@ function startNewGame() {
     botButton.disabled = game.autoGame.status;
     game.start();
     botButton.classList.remove('active');
+    restartButton.disabled = false;
 }
 
 function restartGame() {
