@@ -3,10 +3,20 @@ class Game {
         this.areaWrapper = options.gameArea;
         this.controlsWrapper = options.controls;
         this.colorsArray = this.createColorsArray(options.colorsCount);
+        this.stepHistory = options.stepHistory;
         this.fieldSize = {
             rows: options.rowsCount,
             columns: options.columnsCount
         };
+        this._stepCount = 0;
+    }
+
+    get stepCount() {
+        return this._stepCount;
+    }
+    set stepCount(value) {
+        this.stepHistory.firstElementChild.firstElementChild.textContent = value;
+        this._stepCount = value;
     }
 
     start() {
@@ -17,6 +27,8 @@ class Game {
         this.createControls(this.colorsArray);
 
         this.areaWrapper.appendChild(this.table);
+
+        this.stepHistory.classList.add('show');
 
         return this;
     }
@@ -108,8 +120,20 @@ class Game {
         return Math.floor(Math.random() * (max - min) + min);
     }
 
+
+    historyLogger(color) {
+        const step = document.createElement('li');
+        step.classList.add('stepHistoryItem');
+        step.textContent = this.stepCount;
+        step.style.backgroundColor = color;
+        this.stepHistory.lastElementChild.appendChild(step);
+    }
+
     controlClick(event) {
         const color = event.target.dataset.color;
+
+        this.stepCount++;
+        this.historyLogger(color);
 
         this.matcher(0, 0, this.stateMap[0][0].color);
 
@@ -198,6 +222,9 @@ class Game {
 
                     return target;
                 }();
+
+                this.stepCount++;
+                this.historyLogger(color);
 
                 this.mapCellsUpdate(color);
                 this.updateDomTable(this.table, this.stateMap);
@@ -310,6 +337,7 @@ function gameInit() {
             rowsCount: +gameOptions['rows'].value,
             columnsCount: +gameOptions['columns'].value,
             colorsCount: +gameOptions['colors'].value,
+            stepHistory: document.getElementById('stepHistory')
         };
 
         options.gameArea.innerHTML = '';

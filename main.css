@@ -29,8 +29,9 @@ body {
     height: 25vw ;
     background-color: #555;
 }
+
  @media(max-width: 1024px) {
-    .area    {
+    .area {
         width: 35vw;
         height: 35vw;
     }
@@ -50,7 +51,6 @@ body {
 .cell {
     border: 1px solid transparent;
     transition: all .2s ease;
-    cursor: pointer;
 }
 
 .cell:hover {
@@ -63,6 +63,7 @@ body {
     flex-flow: column wrap;
     margin: 30px 0;
 }
+
 .gameOptionsElement {
     display: flex;
     flex-flow: row wrap;
@@ -103,6 +104,7 @@ body {
     align-self: flex-end;
     margin: 10px 0;
 }
+
 .errorsListItem {
     color: #f00;
 }
@@ -149,14 +151,14 @@ body {
     bottom: 0;
     background-color: rgba(85, 85, 85, 0.5);
 }
+
 .baner {
     position: relative;
-
-
     width: 25vw;
     padding: 20px;
     background-color: #ddd;
 }
+
 .banerClose {
     position: absolute;
     right: -10px;
@@ -164,24 +166,62 @@ body {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-
     text-align: center;
-
     color: #fff;
     background-color: #000;
     cursor: pointer;
 }
+
 .baner.error {
     border: 2px solid #f00;
 }
+
 .baner.success {
     border: 2px solid #0f0;
 }
+
 .banerTitle {
     text-align: center;
     margin-bottom: 10px;
 }
+
 .banerText {
     margin: 0 20px;
     text-align: center;
+}
+
+/* --------------------------- Step history  --------------------------- */
+.stepHistoryWrapper {
+    display: none;
+    flex-flow: column nowrap;
+    position: fixed;
+    top: 0;
+    right: 0;
+    padding: 25px;
+    width: 250px;
+    background-color: #acabab;
+    box-shadow: -2px 2px 25px 0 rgba(0, 0, 0, .75);
+}
+.stepHistoryWrapper.show {
+    display: flex;
+}
+
+.stepHistory {
+    list-style: none;
+    margin: 10px 0;
+    max-height: 300px;
+    overflow-y: auto;
+}
+.stepHistoryItem {
+    color: #fff;
+    text-align: center;
+    margin: 5px;
+}
+
+.stepHistoryItem .color {
+    display: block;
+    height: 20px;
+    width: 20px;
+    margin: 0 20px;
+    background-color: #fff;
 }
