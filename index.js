@@ -209,6 +209,7 @@ class Game {
 const startButton = document.getElementById('gameStart'),
     botButton = document.getElementById('botStart'),
     gameOptions = document.getElementById('gameOptions'),
+    gameControls = document.getElementById('gameControls'),
     validator = new Validator();
 
 startButton.addEventListener('click', gameStart);
@@ -305,7 +306,7 @@ function gameInit() {
     if (validator.checkGlobalValid(gameOptions)) {
         const options = {
             gameArea: document.getElementById('gameArea'),
-            controls: document.getElementById('gameControls'),
+            controls: gameControls,
             rowsCount: +gameOptions['rows'].value,
             columnsCount: +gameOptions['columns'].value,
             colorsCount: +gameOptions['colors'].value,
@@ -343,6 +344,8 @@ function showBaner(type, title, message) {
     banerText.textContent = message;
 
     wrapper.style.display = 'flex';
+
+    gameControls.innerHTML = '';
 
     button.addEventListener('click', function () {
         wrapper.style.display = 'none';
