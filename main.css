@@ -79,6 +79,7 @@ body {
 .gameOptionsInput {
     border: none;
     padding: 10px;
+    max-width: 70px;
 }
 
 .gameButton {

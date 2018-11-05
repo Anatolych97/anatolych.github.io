@@ -220,10 +220,11 @@ gameOptions['columns'].addEventListener('focusout', validator.fieldSizeValidate)
 function Validator() {
 
     function colorsCountValidate({ target: element }) {
-        const errors = [];
+        const errors = [],
+            maxValue = +gameOptions['rows'].value * +gameOptions['columns'].value;
 
-        if (element.value > 20) {
-            errors.push('Max colors count: 20');
+        if (element.value > maxValue) {
+            errors.push('Max colors count: ' + maxValue);
         }
 
         if (element.value < 3) {
