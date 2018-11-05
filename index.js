@@ -33,7 +33,7 @@ class Game {
         return colors;
     }
 
-    /* Генерирует панельку с цветами-кнопками для пользователя */
+    /* Generates a panel with colors for the user */
     createControls(colors) {
         let list = document.createElement('ul'),
             elem = document.createElement('li');
@@ -49,10 +49,10 @@ class Game {
     }
 
     /*
-      Создает карту поля. Изначально все действия совершаются над этой картой.
-      По ней будет совершаться поиск сопряженных элементов, отталкиваясь от меток внутри неё
-      будет перекрашиваться поле.
-      DOM - дерево обновляется только после того, как будет обработана карта.
+        Creates a field map. Initially, all actions are performed on this card.
+        It will be used to search for conjugate elements, starting from the labels inside it.
+        will repaint the field.
+        DOM tree is updated only after the map is processed.
     */
     createMap(size, colors) {
         let tableMap;
@@ -70,7 +70,7 @@ class Game {
         return tableMap;
     }
 
-    /* Рендерит пустое игровое поле без цветов */
+    /* Rendering empty game area without colors */
     createTable(size) {
         let $table = document.createElement('table'),
             row = document.createElement('tr'),
@@ -91,9 +91,9 @@ class Game {
     }
 
     /*
-        Функция заливки поля.
-        Единственная роль это обновить дерево на основании карты игры.
-        ВАЖНО: Чистое обновление цветов, никаких побочных действий или условий!
+        Field fill function.
+        The only role is to update the tree based on the game map.
+        IMPORTANT: Pure update of colors, no side effects or conditions!
     */
     updateDomTable(table, map) {
         for (let row of table.rows) {
