@@ -10,15 +10,35 @@ class Game {
         };
         this._stepCount = 0;
         this.sessionSave = {};
+        this.autoGame = {
+            status: false,
+            timer: null
+        };
+        this._autoGameInterval = 300;
     }
+
+
+    /* ------------------------------ History logger methods ------------------------------ */
 
     get stepCount() {
         return this._stepCount;
     }
     set stepCount(value) {
-        this.stepHistory.firstElementChild.firstElementChild.textContent = value;
-        this._stepCount = value;
+        if (value >= 0) {
+            this.stepHistory.firstElementChild.firstElementChild.textContent = value;
+            this._stepCount = value;
+        }
     }
+
+    historyLogger(color) {
+        const step = document.createElement('li');
+        step.classList.add('stepHistoryItem');
+        step.textContent = this.stepCount;
+        step.style.backgroundColor = color;
+        this.stepHistory.lastElementChild.appendChild(step);
+    }
+
+    /* ------------------------------ Support methods ------------------------------ */
 
     stateClone(oldState) {
         const newState = new Array(oldState.length);
@@ -31,26 +51,52 @@ class Game {
         return newState;
     }
 
-    start(newGame) {
+    clearArea() {
+        this.areaWrapper.innerHTML = '';
+        this.controlsWrapper.innerHTML = '';
+        this.stepCount = 0;
+        this.stepHistory.lastElementChild.innerHTML = '';
+    }
+
+    setOptions(options) {
+        this.areaWrapper = options.gameArea;
+        this.controlsWrapper = options.controls;
+        this.colorsArray = this.createColorsArray(options.colorsCount);
+        this.fieldSize = {
+            rows: options.rowsCount,
+            columns: options.columnsCount
+        };
+    }
+
+    /* ------------------------------ Start game methods ------------------------------ */
+
+    start(newGame = true) {
+        this.clearArea();
+
         if (newGame) {
             this.stateMap = this.createMap(this.fieldSize, this.colorsArray);
             this.sessionSave.state = this.stateClone(this.stateMap);
             this.table = this.createTable(this.fieldSize);
-            this.createControls(this.colorsArray);
-        } else {
-            this.stateMap = this.stateClone(this.sessionSave.state);
-            this.stepHistory.lastElementChild.innerHTML = '';
-            this.stepCount = 0;
         }
 
         this.updateDomTable(this.table, this.stateMap);
-        this.areaWrapper.appendChild(this.table);
 
+        this.createControls(this.colorsArray);
+        this.areaWrapper.appendChild(this.table);
 
         this.stepHistory.classList.add('show');
 
         return this;
     }
+
+    restart() {
+        this.stateMap = this.stateClone(this.sessionSave.state);
+        clearInterval(this.autoGame.timer);
+        this.start(false);
+    }
+
+
+    /* ------------------------------ Generate game methods ------------------------------ */
 
     createColorsArray(colorsCount) {
         const colors = [];
@@ -70,12 +116,12 @@ class Game {
             elem = document.createElement('li');
         list.classList.add('gameControlsList');
         elem.classList.add('gameControlsElement');
-
         for (let color of colors) {
             elem.dataset.color = color;
             elem.style.backgroundColor = color;
             list.appendChild(elem.cloneNode(true)).addEventListener('click', this.controlClick.bind(this));
         }
+        list.classList.add('show');
         this.controlsWrapper.appendChild(list);
     }
 
@@ -139,35 +185,7 @@ class Game {
         return Math.floor(Math.random() * (max - min) + min);
     }
 
-
-    historyLogger(color) {
-        const step = document.createElement('li');
-        step.classList.add('stepHistoryItem');
-        step.textContent = this.stepCount;
-        step.style.backgroundColor = color;
-        this.stepHistory.lastElementChild.appendChild(step);
-    }
-
-    controlClick(event) {
-        const color = event.target.dataset.color;
-
-        this.stepCount++;
-        this.historyLogger(color);
-
-        this.matcher(0, 0, this.stateMap[0][0].color);
-
-        this.stateMap[0][0].color = color;
-        this.matcher(0, 0, color);
-
-        this.mapCellsUpdate(color);
-        this.updateDomTable(this.table, this.stateMap);
-
-
-
-        if (this.checkWin()) {
-            showBaner('success', 'WIN', 'You are winner!');
-        }
-    }
+    /* ------------------------------ Main algorythm methods ------------------------------ */
 
     matcher(row, cell, color, matches = {}) {
         if (cell >= this.fieldSize.columns || cell < 0) return;
@@ -220,35 +238,74 @@ class Game {
         return win;
     }
 
-    botAI(stepTime) {
-        const autoGame = setInterval(game.bind(this), stepTime);
+    /* ------------------------------ Gameplay methods ------------------------------ */
+
+    get autoGameInterval() {
+        return this._autoGameInterval;
+    }
+    set autoGameInterval(value) {
+        if (value >= 0) {
+            this._autoGameInterval = value;
+        }
+    }
+
+    controlClick(event) {
+        const color = event.target.dataset.color;
+
+        this.stepCount++;
+        this.historyLogger(color);
+
+        this.matcher(0, 0, this.stateMap[0][0].color);
+
+        this.stateMap[0][0].color = color;
+        this.matcher(0, 0, color);
+
+        this.mapCellsUpdate(color);
+        this.updateDomTable(this.table, this.stateMap);
+
+        if (this.checkWin()) {
+            showBaner('success', 'WIN', 'You are winner!');
+        }
+    }
+
+    botAI() {
+        clearInterval(this.autoGame.timer);
+        this.autoGame.timer = setInterval(game.bind(this), this.autoGameInterval);
 
         function game() {
-            if (this.checkWin()) {
-                showBaner('success', 'WIN', 'You are winner!');
-                clearInterval(autoGame);
-            } else {
-                const matches = {};
-                this.matcher(0, 0, this.stateMap[0][0].color, matches);
+            console.log('Game Stoped');
+            if (this.autoGame.status) {
+                if (this.checkWin()) {
+                    showBaner('success', 'WIN', 'You are winner!');
+                    clearInterval(this.autoGame.timer);
 
-                const color = function () {
-                    let max = 0,
-                        target = '';
-                    for (let color in matches) {
-                        if (matches[color] > max) {
-                            max = matches[color];
-                            target = color;
+                    startButton.disabled = false;
+                    restartButton.disabled = false;
+                    botButton.disabled = false;
+                } else {
+                    const matches = {};
+                    this.matcher(0, 0, this.stateMap[0][0].color, matches);
+
+                    const color = function () {
+                        let max = 0,
+                            target = '';
+                        for (let color in matches) {
+                            if (matches[color] > max) {
+                                max = matches[color];
+                                target = color;
+                            }
                         }
-                    }
+                        return target;
+                    }();
 
-                    return target;
-                }();
+                    this.stepCount++;
+                    this.historyLogger(color);
 
-                this.stepCount++;
-                this.historyLogger(color);
-
-                this.mapCellsUpdate(color);
-                this.updateDomTable(this.table, this.stateMap);
+                    this.mapCellsUpdate(color);
+                    this.updateDomTable(this.table, this.stateMap);
+                }
+            } else {
+                clearInterval(this.autoGame.timer);
             }
         };
     }
@@ -259,12 +316,12 @@ const startButton = document.getElementById('gameStart'),
     gameOptions = document.getElementById('gameOptions'),
     gameControls = document.getElementById('gameControls'),
     restartButton = document.getElementById('restartButton'),
-    validator = new Validator();
-let game;
+    validator = new Validator(),
+    game = gameInit();
 
-startButton.addEventListener('click', gameStart);
-botButton.addEventListener('click', gameStart);
-restartButton.addEventListener('click', gameStart);
+startButton.addEventListener('click', startNewGame);
+botButton.addEventListener('click', autoGame);
+restartButton.addEventListener('click', restartGame);
 gameOptions['colors'].addEventListener('focusout', validator.colorsCountValidate);
 gameOptions['rows'].addEventListener('focusout', validator.fieldSizeValidate);
 gameOptions['columns'].addEventListener('focusout', validator.fieldSizeValidate);
@@ -347,14 +404,7 @@ function Validator() {
     }
 }
 
-function buttonControls(flag) {
-    startButton.disabled = flag;
-    botButton.disabled = flag;
-}
-
-
-function gameInit() {
-
+function createOptionsObject() {
     if (validator.checkGlobalValid(gameOptions)) {
         const options = {
             gameArea: document.getElementById('gameArea'),
@@ -365,28 +415,45 @@ function gameInit() {
             stepHistory: document.getElementById('stepHistory')
         };
 
-        options.gameArea.innerHTML = '';
-        options.controls.innerHTML = '';
+        return options;
 
-        return new Game(options);
     } else {
         showBaner('error', 'Erorr in options', 'You should input correctly value for start game');
     }
 }
 
-function gameStart({ target }) {
-    if (target.dataset.restart === 'true') {
-        game.start(false);
-    } else {
-        game = gameInit();
-        if (game) {
-            game.start(true);
-            if (target.dataset.autoGame) {
-                buttonControls(true);
-                game.botAI(300);
-            }
-        }
-    }
+function gameInit() {
+    const options = createOptionsObject();
+
+    options.gameArea.innerHTML = '';
+    options.controls.innerHTML = '';
+
+    return new Game(options);
+}
+
+function startNewGame() {
+    game.setOptions(createOptionsObject());
+
+    game.autoGame.status = false;
+    botButton.disabled = game.autoGame.status;
+    game.start();
+    botButton.classList.remove('active');
+}
+
+function restartGame() {
+    game.restart();
+    gameControls.firstElementChild.classList.add('show');
+}
+
+function autoGame() {
+    game.autoGame.status = !game.autoGame.status;
+
+    botButton.classList.toggle('active', game.autoGame.status);
+
+    startButton.disabled = game.autoGame.status;
+    restartButton.disabled = game.autoGame.status;
+
+    game.botAI();
 }
 
 function showBaner(type, title, message) {
@@ -402,7 +469,8 @@ function showBaner(type, title, message) {
 
     wrapper.style.display = 'flex';
 
-    gameControls.innerHTML = '';
+    gameControls.firstElementChild.classList.remove('show');
+    botButton.classList.remove('active');
 
     button.addEventListener('click', function () {
         wrapper.style.display = 'none';
