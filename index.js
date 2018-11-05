@@ -35,7 +35,7 @@ class Game {
 
     /* Generates a panel with colors for the user */
     createControls(colors) {
-        let list = document.createElement('ul'),
+        const list = document.createElement('ul'),
             elem = document.createElement('li');
         list.classList.add('gameControlsList');
         elem.classList.add('gameControlsElement');
@@ -55,8 +55,7 @@ class Game {
         DOM tree is updated only after the map is processed.
     */
     createMap(size, colors) {
-        let tableMap;
-        tableMap = new Array(size.rows);
+        const tableMap = new Array(size.rows);
         for (let rowIndex = 0; rowIndex < tableMap.length; rowIndex++) {
             tableMap[rowIndex] = new Array(size.columns);
             for (let cellIndex = 0; cellIndex < tableMap[rowIndex].length; cellIndex++) {
@@ -72,7 +71,7 @@ class Game {
 
     /* Rendering empty game area without colors */
     createTable(size) {
-        let $table = document.createElement('table'),
+        const $table = document.createElement('table'),
             row = document.createElement('tr'),
             cell = document.createElement('td');
 
@@ -110,7 +109,7 @@ class Game {
     }
 
     controlClick(event) {
-        let color = event.target.dataset.color;
+        const color = event.target.dataset.color;
 
         this.matcher(0, 0, this.stateMap[0][0].color);
 
@@ -221,7 +220,7 @@ gameOptions['columns'].addEventListener('focusout', validator.fieldSizeValidate)
 function Validator() {
 
     function colorsCountValidate({ target: element }) {
-        let errors = [];
+        const errors = [];
 
         if (element.value > 20) {
             errors.push('Max colors count: 20');
@@ -234,7 +233,7 @@ function Validator() {
         errorChecker(element, errors);
     }
     function fieldSizeValidate({ target: element }) {
-        let errors = [];
+        const errors = [];
 
         if (element.value > 50) {
             errors.push('Maximum value: 50');
@@ -332,7 +331,7 @@ function gameStart({ target }) {
 }
 
 function showBaner(type, title, message) {
-    let wrapper = document.querySelector('.banerWrapper'),
+    const wrapper = document.querySelector('.banerWrapper'),
         baner = document.querySelector('.baner'),
         button = document.querySelector('.banerClose'),
         banerTitle = document.querySelector('.banerTitle'),
