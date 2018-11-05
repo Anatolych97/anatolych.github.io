@@ -352,10 +352,10 @@ function gameInit() {
 function gameStart({ target }) {
     const game = gameInit();
     if (game) {
+        game.start();
+        buttonControls(true);
         if (target.dataset.autoGame) {
-            game.start().botAI(300);
-        } else {
-            game.start();
+            game.botAI(300);
         }
     }
 }

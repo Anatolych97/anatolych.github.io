@@ -83,20 +83,33 @@ body {
     max-width: 70px;
 }
 
+.gameButtonComplex {
+    display: flex;
+    flex: 1 1 auto;
+    flex-flow: row;
+    margin: 20px 0;
+}
+
 .gameButton {
     border: none;
     padding: 10px 0;
     cursor: pointer;
+    transition: all .3s ease;
+}
+
+.gameButton:hover {
+    transform: scale(1.1);
 }
 
 .gameOptionsStart {
-    width: 100%;
+    flex-basis: 80%;
     background-color: #fff;
-    margin: 20px 0;
 }
 
 .gameOptionsAI {
+    flex-basis: 20%;
     background-color: #fff;
+    border-left: 1px solid #ccc;
 }
 
 .errorsList {
