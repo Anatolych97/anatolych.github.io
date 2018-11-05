@@ -9,6 +9,7 @@ class Game {
             columns: options.columnsCount
         };
         this._stepCount = 0;
+        this.sessionSave = {};
     }
 
     get stepCount() {
@@ -19,14 +20,32 @@ class Game {
         this._stepCount = value;
     }
 
-    start() {
-        this.stateMap = this.createMap(this.fieldSize, this.colorsArray);
-        this.table = this.createTable(this.fieldSize);
+    stateClone(oldState) {
+        const newState = new Array(oldState.length);
+        for (let i = 0; i < oldState.length; i++) {
+            newState[i] = new Array(oldState[i].length);
+            for (let j = 0; j < oldState[i].length; j++) {
+                newState[i][j] = Object.assign({}, oldState[i][j]);
+            }
+        }
+        return newState;
+    }
+
+    start(newGame) {
+        if (newGame) {
+            this.stateMap = this.createMap(this.fieldSize, this.colorsArray);
+            this.sessionSave.state = this.stateClone(this.stateMap);
+            this.table = this.createTable(this.fieldSize);
+            this.createControls(this.colorsArray);
+        } else {
+            this.stateMap = this.stateClone(this.sessionSave.state);
+            this.stepHistory.lastElementChild.innerHTML = '';
+            this.stepCount = 0;
+        }
 
         this.updateDomTable(this.table, this.stateMap);
-        this.createControls(this.colorsArray);
-
         this.areaWrapper.appendChild(this.table);
+
 
         this.stepHistory.classList.add('show');
 
@@ -143,6 +162,8 @@ class Game {
         this.mapCellsUpdate(color);
         this.updateDomTable(this.table, this.stateMap);
 
+
+
         if (this.checkWin()) {
             showBaner('success', 'WIN', 'You are winner!');
         }
@@ -237,10 +258,13 @@ const startButton = document.getElementById('gameStart'),
     botButton = document.getElementById('botStart'),
     gameOptions = document.getElementById('gameOptions'),
     gameControls = document.getElementById('gameControls'),
+    restartButton = document.getElementById('restartButton'),
     validator = new Validator();
+let game;
 
 startButton.addEventListener('click', gameStart);
 botButton.addEventListener('click', gameStart);
+restartButton.addEventListener('click', gameStart);
 gameOptions['colors'].addEventListener('focusout', validator.colorsCountValidate);
 gameOptions['rows'].addEventListener('focusout', validator.fieldSizeValidate);
 gameOptions['columns'].addEventListener('focusout', validator.fieldSizeValidate);
@@ -328,6 +352,7 @@ function buttonControls(flag) {
     botButton.disabled = flag;
 }
 
+
 function gameInit() {
 
     if (validator.checkGlobalValid(gameOptions)) {
@@ -350,12 +375,16 @@ function gameInit() {
 }
 
 function gameStart({ target }) {
-    const game = gameInit();
-    if (game) {
-        game.start();
-        buttonControls(true);
-        if (target.dataset.autoGame) {
-            game.botAI(300);
+    if (target.dataset.restart === 'true') {
+        game.start(false);
+    } else {
+        game = gameInit();
+        if (game) {
+            game.start(true);
+            if (target.dataset.autoGame) {
+                buttonControls(true);
+                game.botAI(300);
+            }
         }
     }
 }

@@ -111,6 +111,9 @@ body {
     background-color: #fff;
     border-left: 1px solid #ccc;
 }
+.gameRepeat {
+    background-color: #fff;
+}
 
 .errorsList {
     list-style: none;
