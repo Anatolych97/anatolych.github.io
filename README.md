@@ -1,9 +1,8 @@
 # Filler Game
-## Anatoly Nizhnikov
-
+## Anatoly Nizhnykov
 
 You will implement a very simple greedy strategy to solve it:
--for each move, choose the color that will result in the largest number of tiles
+- for each move, choose the color that will result in the largest number of tiles
 - connected to the origin;
 - if there is a tile, break ties by choosing the color that has the lowest rank among the colors.
 
