@@ -59,6 +59,7 @@ export default function App () {
   }
 
   function selectColor (selectedCell) {
+    console.log('selectedCell', selectedCell);
     setTurns((turns) => [
       {
         ...selectedCell,
@@ -91,7 +92,7 @@ export default function App () {
       onSelectCell={selectColor}
     />
 
-    <GameHistory />
+    <GameHistory turns={turns} />
     <GameResult />
   </>
 }

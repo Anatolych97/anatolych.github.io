@@ -9,7 +9,7 @@ export default function GameBoard({ turns = [], colorsGrid, onSelectCell }) {
         onClick={() => onSelectCell({
           row: rowIndex,
           col: colIndex,
-          color: cellColor,
+          color: cellColor.color,
         })}
         style={{ 'backgroundColor': turns[0]?.blockedCells.has(rowIndex + '_' + colIndex) ? turns[0].color : cellColor.color }}
         disabled={ turns[0]?.blockedCells.has(rowIndex + '_' + colIndex) }

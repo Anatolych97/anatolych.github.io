@@ -97,45 +97,6 @@ class Game {
     this.start(false);
   }
 
-
-  /* ------------------------------ Generate game methods ------------------------------ */
-
-  /* Generates a panel with colors for the user */
-
-
-  /*
-      Creates a field map. Initially, all actions are performed on this card.
-        It will be used to search for conjugate elements, starting from the labels inside it.
-        will repaint the field.
-      DOM tree is updated only after the map is processed.
-  */
-  createMap(size, colors) {
-    const tableMap = new Array(size.rows);
-    for (let rowIndex = 0; rowIndex < tableMap.length; rowIndex++) {
-      tableMap[rowIndex] = new Array(size.columns);
-      for (let cellIndex = 0; cellIndex < tableMap[rowIndex].length; cellIndex++) {
-        let hash = this.randomValue(0, colors.length);
-        tableMap[rowIndex][cellIndex] = {
-          color: colors[hash],
-          block: false
-        }
-      }
-    }
-    return tableMap;
-  }
-
-  /* Rendering empty game area without colors */
-  updateDomTable(table, map) {
-    for (let row of table.rows) {
-      for (let cell of row.cells) {
-        cell.dataset.color = map[row.rowIndex][cell.cellIndex]['color'];
-        cell.dataset.block = map[row.rowIndex][cell.cellIndex]['block'];
-        cell.style.backgroundColor = map[row.rowIndex][cell.cellIndex]['color'];
-      }
-    }
-  }
-
-
   /* ------------------------------ Main algorythm methods ------------------------------ */
 
   matcher(row, cell, color, matches = {}) {
@@ -418,25 +379,4 @@ function autoGame() {
   restartButton.disabled = game.autoGame.status;
 
   game.botAI();
-}
-
-function showBaner(type, title, message) {
-  const wrapper = document.querySelector('.banerWrapper'),
-    baner = document.querySelector('.baner'),
-    button = document.querySelector('.banerClose'),
-    banerTitle = document.querySelector('.banerTitle'),
-    banerText = document.querySelector('.banerText');
-
-  baner.classList.add('baner', type);
-  banerTitle.textContent = title;
-  banerText.textContent = message;
-
-  wrapper.style.display = 'flex';
-
-  gameControls.firstElementChild.classList.remove('show');
-  botButton.classList.remove('active');
-
-  button.addEventListener('click', function () {
-    wrapper.style.display = 'none';
-  });
 }

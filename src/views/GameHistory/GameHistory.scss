@@ -1,6 +1,6 @@
 .game-history {
   &-wrapper {
-    display: none;
+    display: flex;
     flex-flow: column nowrap;
     position: fixed;
     top: 0;
@@ -9,10 +9,6 @@
     width: 250px;
     background-color: #acabab;
     box-shadow: -2px 2px 25px 0 rgba(0, 0, 0, .75);
-
-    &.show {
-      display: flex;
-    }
   }
 
   list-style: none;
