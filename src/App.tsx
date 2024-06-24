@@ -16,22 +16,22 @@ function createColorsArray(colorsCount) {
   }.bind(this);
 
   for (let i = 0; i < colorsCount; i++) {
-    colors.push(`rgb(${ randColor() },${ randColor() },${ randColor() })`);
+    colors.push(`rgb(${randColor()},${randColor()},${randColor()})`);
   }
   return colors;
 }
 
 
-export default function App () {
-  const [ turns, setTurns ] = useState([]);
-  const [ grid, setGrid ] = useState([]);
+export default function App() {
+  const [turns, setTurns] = useState([]);
+  const [grid, setGrid] = useState([]);
 
-  const [ rowsCount, setRowsCount ] = useState(10);
-  const [ columnsCount, setColumnsCount ] = useState(10);
-  const [ colorsCount, setColorsCount ] = useState(10);
+  const [rowsCount, setRowsCount] = useState(5);
+  const [columnsCount, setColumnsCount] = useState(5);
+  const [colorsCount, setColorsCount] = useState(4);
 
-  function startGame () {
-    const colors = createColorsArray(10);
+  function startGame() {
+    const colors = createColorsArray(colorsCount);
 
     const tableMap = new Array(rowsCount);
     for (let rowIndex = 0; rowIndex < tableMap.length; rowIndex++) {
@@ -42,7 +42,7 @@ export default function App () {
 
         tableMap[rowIndex][cellIndex] = {
           color: colors[hash],
-          block: false
+          blocked: false
         }
       }
     }
@@ -50,25 +50,54 @@ export default function App () {
     setGrid(tableMap);
   }
 
-  function activateAI () {
+  function activateAI() {
 
   }
 
-  function resetGame () {
+  function resetGame() {
     setTurns([]);
+    setGrid((grid) => grid);
   }
 
-  function selectColor (selectedCell) {
-    console.log('selectedCell', selectedCell);
-    setTurns((turns) => [
-      {
-        ...selectedCell,
-        blockedCells: new Set([
-          selectedCell.row + '_' + selectedCell.col,
-        ]),
-      },
-      ...turns
+  function matcher(row, cell, color, matches = [], visitedCells = new Set()) {
+    if (cell >= columnsCount || cell < 0) return;
+    if (row >= rowsCount || row < 0) return;
+
+    const marker = row + '_' + cell;
+    if (visitedCells.has(marker)) return;
+    visitedCells.add(marker);
+
+    if (grid[row][cell].color === color || matches.includes(marker)) {
+      matches.push(marker);
+
+      matcher(row + 1, cell, color, matches, visitedCells);
+      matcher(row - 1, cell, color, matches, visitedCells);
+      matcher(row, cell - 1, color, matches, visitedCells);
+      matcher(row, cell + 1, color, matches, visitedCells);
+    }
+
+    return matches;
+  }
+
+  function findBlockedCells(selectedCell, usedCells) {
+    return new Set([
+      selectedCell.row + '_' + selectedCell.col,
+      ...matcher(selectedCell.row, selectedCell.col, selectedCell.color, usedCells),
     ]);
+  }
+
+  function selectColor(selectedCell) {
+    setTurns((turns) => {
+      const usedCells = turns.flatMap((turn) => [ ...turn.blockedCells.values() ]);
+
+      return [
+        {
+          ...selectedCell,
+          blockedCells: findBlockedCells(selectedCell, usedCells),
+        },
+        ...turns
+      ];
+    });
   }
 
   return <>
@@ -92,7 +121,7 @@ export default function App () {
       onSelectCell={selectColor}
     />
 
-    <GameHistory turns={turns} />
-    <GameResult />
+    {!!turns.length && <GameHistory turns={turns}/>}
+    <GameResult/>
   </>
 }

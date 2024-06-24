@@ -3,6 +3,10 @@ import './GameOptions.scss'
 import {InputNumber, Button, FloatButton} from 'antd';
 
 export default function GameOptions({
+                                      rows,
+                                      columns,
+                                      colors,
+
                                       onStart,
                                       onReset,
                                       onAIBot,
@@ -17,7 +21,7 @@ export default function GameOptions({
 
 
       id="rows"
-      value="10"
+      value={rows}
       max="50"
       min="3"
       required
@@ -28,8 +32,7 @@ export default function GameOptions({
     <InputNumber
       addonBefore="Columns: "
 
-      id="rows"
-      value="10"
+      value={columns}
       max="50"
       min="3"
       required
@@ -40,8 +43,7 @@ export default function GameOptions({
     <InputNumber
       addonBefore="Colors: "
 
-      id="rows"
-      value="10"
+      value={colors}
       max="15"
       min="3"
       required
@@ -53,7 +55,7 @@ export default function GameOptions({
       <Button onClick={onStart}>Start</Button>
       <FloatButton onClick={onAIBot} icon="AI"/>
 
-      <Button onClick={onReset} disabled>Restart</Button>
+      <Button onClick={onReset}>Restart</Button>
     </div>
   </form>)
 }
