@@ -14,7 +14,7 @@ class Game {
             status: false,
             timer: null
         };
-        this._autoGameInterval = 300;
+        this.autoGameInterval = 300;
     }
 
 
@@ -23,6 +23,7 @@ class Game {
     get stepCount() {
         return this._stepCount;
     }
+
     set stepCount(value) {
         if (value >= 0) {
             this.stepHistory.firstElementChild.firstElementChild.textContent = value;
@@ -105,7 +106,7 @@ class Game {
         }.bind(this);
 
         for (let i = 0; i < colorsCount; i++) {
-            colors.push(`rgb(${randColor()},${randColor()},${randColor()})`);
+            colors.push(`rgb(${ randColor() },${ randColor() },${ randColor() })`);
         }
         return colors;
     }
@@ -243,6 +244,7 @@ class Game {
     get autoGameInterval() {
         return this._autoGameInterval;
     }
+
     set autoGameInterval(value) {
         if (value >= 0) {
             this._autoGameInterval = value;
@@ -271,44 +273,68 @@ class Game {
     botAI() {
         clearInterval(this.autoGame.timer);
         this.autoGame.timer = setInterval(game.bind(this), this.autoGameInterval);
+        const colorsCount = calculateTheMostOftenColor(this.stateMap);
+        console.log(colorsCount);
 
         function game() {
-            console.log('Game Stoped');
-            if (this.autoGame.status) {
-                if (this.checkWin()) {
-                    showBaner('success', 'WIN', 'You are winner!');
-                    clearInterval(this.autoGame.timer);
-
-                    startButton.disabled = false;
-                    restartButton.disabled = false;
-                    botButton.disabled = false;
-                } else {
-                    const matches = {};
-                    this.matcher(0, 0, this.stateMap[0][0].color, matches);
-
-                    const color = function () {
-                        let max = 0,
-                            target = '';
-                        for (let color in matches) {
-                            if (matches[color] > max) {
-                                max = matches[color];
-                                target = color;
-                            }
-                        }
-                        return target;
-                    }();
-
-                    this.stepCount++;
-                    this.historyLogger(color);
-
-                    this.mapCellsUpdate(color);
-                    this.updateDomTable(this.table, this.stateMap);
-                }
-            } else {
+            if (!this.autoGame.status) {
                 clearInterval(this.autoGame.timer);
+
+                return;
             }
-        };
+
+            if (this.checkWin()) {
+                showBaner('success', 'WIN', 'You are winner!');
+                clearInterval(this.autoGame.timer);
+
+                startButton.disabled = false;
+                restartButton.disabled = false;
+                botButton.disabled = false;
+
+                return;
+            }
+
+
+            console.log(this.stateMap);
+
+            const matches = {};
+            this.matcher(0, 0, this.stateMap[0][0].color, matches);
+
+            const color = function () {
+                let max = 0,
+                    target = '';
+                for (let color in matches) {
+                    if (matches[color] > max) {
+                        max = matches[color];
+                        target = color;
+                    }
+                }
+                return target;
+            }();
+
+            this.stepCount++;
+            this.historyLogger(color);
+
+            this.mapCellsUpdate(color);
+            this.updateDomTable(this.table, this.stateMap);
+        }
     }
+}
+
+function calculateTheMostOftenColor (stateMap) {
+    const colorsCount = {};
+
+    for (let row of stateMap) {
+        for (let cell of row) {
+            if (colorsCount[cell.color]) {
+                colorsCount[cell.color]++;
+            } else {
+                colorsCount[cell.color] = 1;
+            }
+        }
+    }
+
+    return colorsCount;
 }
 
 const startButton = document.getElementById('gameStart'),
@@ -342,6 +368,7 @@ function Validator() {
 
         errorChecker(element, errors);
     }
+
     function fieldSizeValidate({ target: element }) {
         const errors = [];
 
@@ -366,6 +393,7 @@ function Validator() {
             clearErrors(element);
         }
     }
+
     function showError(elem, errorsArray) {
         clearErrors(elem);
 
@@ -382,6 +410,7 @@ function Validator() {
 
         elem.parentElement.insertAdjacentElement('afterEnd', ul);
     }
+
     function clearErrors(elem) {
         if (elem.parentElement.nextElementSibling && elem.parentElement.nextElementSibling.classList.contains('errorsList')) {
             elem.parentElement.nextElementSibling.remove();
