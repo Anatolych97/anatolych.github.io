@@ -1,22 +1,25 @@
 import './GameBoard.scss';
 
-export default function GameBoard({ turns = [], rows, cols, onSelectCell }) {
-  const grid = [ ...new Array(rows) ].map((_, rowIndex) =>  [
-      ...new Array(cols)
-    ].map((_, colIndex) =>
+export default function GameBoard({ turns = [], colorsGrid, onSelectCell }) {
+  console.log('colorsGrid', colorsGrid)
+  const grid = colorsGrid.map((row, rowIndex) =>  row.map((cellColor, colIndex) =>
       <button
         className="game-board-cell"
         key={rowIndex + '_' + colIndex}
-        onClick={onSelectCell}
-        style={{ 'backgroundColor': turns[rowIndex]?.[colIndex].color }}
-        disabled={turns[rowIndex]?.[colIndex].disabled}
+        onClick={() => onSelectCell({
+          row: rowIndex,
+          col: colIndex,
+          color: cellColor,
+        })}
+        style={{ 'backgroundColor': turns[0]?.blockedCells.has(rowIndex + '_' + colIndex) ? turns[0].color : cellColor.color }}
+        disabled={ turns[0]?.blockedCells.has(rowIndex + '_' + colIndex) }
       >
         { rowIndex } - { colIndex }
       </button>
     )
   );
 
-  return (<div className="game-board" style={{ '--cols': cols }}>
+  return (<div className="game-board" style={{ '--cols': colorsGrid?.[0]?.length }}>
     { grid }
   </div>);
 }
