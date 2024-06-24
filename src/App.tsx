@@ -2,6 +2,7 @@ import GameHistory from "./views/GameHistory/GameHistory.tsx";
 import GameOptions from "./views/GameOptions/GameOptions.tsx";
 import GameBoard from "./views/GameBoard/GameBoard.tsx";
 import GameResult from "./views/GameResult/GameResult.tsx";
+import GameControls from "./views/GameControls/GameControls.tsx";
 
 import {useState} from "react";
 import './App.scss';
@@ -26,6 +27,7 @@ function createColorsArray(colorsCount) {
 export default function App() {
   const [turns, setTurns] = useState([]);
   const [grid, setGrid] = useState([]);
+  const [colors, setColors] = useState([]);
 
   const [rowsCount, setRowsCount] = useState(15);
   const [columnsCount, setColumnsCount] = useState(15);
@@ -33,6 +35,7 @@ export default function App() {
 
   function startGame() {
     const colors = createColorsArray(colorsCount);
+    setColors(colors);
 
     const tableMap = new Array(rowsCount);
     for (let rowIndex = 0; rowIndex < tableMap.length; rowIndex++) {
@@ -82,12 +85,11 @@ export default function App() {
 
   function findBlockedCells(selectedCell, usedCells) {
     return new Set([
-      selectedCell.row + '_' + selectedCell.col,
       ...matcher(selectedCell.row, selectedCell.col, selectedCell.color, usedCells),
     ]);
   }
 
-  function selectColor(selectedCell) {
+  function selectCell(selectedCell) {
     setTurns((turns) => {
       const usedCells = turns.flatMap((turn) => [ ...turn.blockedCells.values() ]);
 
@@ -100,6 +102,26 @@ export default function App() {
       ];
     });
   }
+
+  function selectColor(color: string) {
+    setTurns((turns) => {
+      const usedCells = turns.flatMap((turn) => [ ...turn.blockedCells.values() ]);
+      const selectedCell = {
+        row: 0,
+        col: 0,
+        color,
+      }
+
+      return [
+        {
+          ...selectedCell,
+          blockedCells: findBlockedCells(selectedCell, [  '0_0', ...usedCells ]),
+        },
+        ...turns
+      ];
+    });
+  }
+
 
   return <>
     <GameOptions
@@ -120,10 +142,12 @@ export default function App() {
       <GameBoard
         colorsGrid={grid}
         turns={turns}
-        onSelectCell={selectColor}
+        onSelectCell={selectCell}
       />
 
       <GameHistory className="game-history" turns={turns} />
+
+      <GameControls colors={colors} onSelectColor={selectColor} />
     </div>
 
     <GameResult turns={turns} rows={rowsCount} cols={columnsCount}/>

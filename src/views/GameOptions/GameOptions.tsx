@@ -26,7 +26,7 @@ export default function GameOptions({
       min="3"
       required
 
-      onChange={onChangeRowsCount}
+      onChange={(value) => onChangeRowsCount(value)}
     />
 
     <InputNumber
@@ -37,7 +37,7 @@ export default function GameOptions({
       min="3"
       required
 
-      onChange={onChangeColumnsCount}
+      onChange={(value) => onChangeColumnsCount(value)}
     />
 
     <InputNumber
@@ -48,7 +48,7 @@ export default function GameOptions({
       min="3"
       required
 
-      onChange={onChangeColorsCount}
+      onChange={(value) => onChangeColorsCount(value)}
     />
 
     <div className="actions">
