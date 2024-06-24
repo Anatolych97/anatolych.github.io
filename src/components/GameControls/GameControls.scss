@@ -1,0 +1,29 @@
+.game-controls {
+  max-width: 40vw;
+
+  &-list {
+    display: none;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+    list-style: none;
+  }
+
+  &-list.show {
+    display: flex;
+  }
+
+  &-element {
+    display: inline-block;
+    width: 80px;
+    height: 25px;
+    margin: 10px;
+    cursor: pointer;
+    transition: all .3s linear;
+  }
+
+  &-element:hover {
+    transform: scale(1.2);
+  }
+}

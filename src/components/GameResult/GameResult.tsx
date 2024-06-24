@@ -1,10 +1,12 @@
+import './GameResult.scss';
+
 export default function GameResult() {
   return (
-    <div className="banerWrapper">
-      <div className="baner">
-        <h3 className="banerTitle"></h3>
-        <p className="banerText"></p>
-        <span className="banerClose">x</span>
+    <div className="modal-wrapper">
+      <div className="modal">
+        <h3 className="modal-title"></h3>
+        <p className="modal-text"></p>
+        <span className="modal-close">x</span>
       </div>
     </div>
   )

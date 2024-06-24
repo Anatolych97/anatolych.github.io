@@ -1,3 +1,5 @@
+import './GameHistory.scss';
+
 export default function GameHistory() {
   return (
     <div id="stepHistory" className="stepHistoryWrapper">

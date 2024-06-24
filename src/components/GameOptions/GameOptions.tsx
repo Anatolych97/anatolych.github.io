@@ -1,11 +1,11 @@
+import './GameOptions.scss'
+
 export default function GameOptions() {
-  return (<form action="#"
-        id="gameOptions"
-        className="gameOptions">
-    <p className="gameOptionsElement">
-      <label className="gameOptionsLabel"
+  return (<form action="#" className="game-options">
+    <p className="game-options-element">
+      <label className="game-options-label"
              htmlFor="rows">Row count</label>
-      <input className="gameOptionsInput"
+      <input className="game-options-input"
              type="number"
              id="rows"
              name="rows"
@@ -14,10 +14,10 @@ export default function GameOptions() {
              min="3"
              required/>
     </p>
-    <p className="gameOptionsElement">
-      <label className="gameOptionsLabel"
+    <p className="game-options-Element">
+      <label className="game-options-label"
              htmlFor="columns">Column count</label>
-      <input className="gameOptionsInput"
+      <input className="game-options-input"
              type="number"
              id="columns"
              name="columns"
@@ -26,10 +26,10 @@ export default function GameOptions() {
              min="3"
              required/>
     </p>
-    <p className="gameOptionsElement">
-      <label className="gameOptionsLabel"
+    <p className="game-options-Element">
+      <label className="game-options-label"
              htmlFor="colors">Color count</label>
-      <input className="gameOptionsInput"
+      <input className="game-options-input"
              type="number"
              id="colors"
              name="colors"
@@ -40,12 +40,12 @@ export default function GameOptions() {
 
     <p className="gameButtonComplex">
       <button type="button"
-              className="gameButton gameOptionsStart"
+              className="gameButton game-options-start"
               id="gameStart"
               data-auto-game="">Start
       </button>
       <button type="button"
-              className="gameButton gameOptionsAI"
+              className="gameButton game-options-AI"
               data-auto-game="true"
               id="botStart"
               disabled>AI

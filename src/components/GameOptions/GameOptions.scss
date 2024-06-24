@@ -1,0 +1,72 @@
+.game-options {
+  display: flex;
+  flex-flow: column wrap;
+  margin: 30px 0;
+
+
+  &-element {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: baseline;
+  }
+
+  &-label {
+    display: block;
+    width: 200px;
+    margin: 20px 0 0 0;
+    text-transform: uppercase;
+  }
+
+  &-input {
+    border: none;
+    padding: 10px;
+    max-width: 70px;
+  }
+}
+
+.game-button {
+  border: none;
+  padding: 10px 0;
+  cursor: pointer;
+  transition: all .3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &-complex {
+    display: flex;
+    flex: 1 1 auto;
+    flex-flow: row;
+    margin: 20px 0;
+  }
+
+  &-start {
+    flex-basis: 80%;
+    background-color: #fff;
+  }
+
+  &-AI {
+    flex-basis: 20%;
+    background-color: #f00;
+    border-left: 1px solid #ccc;
+  }
+
+  &-AI.active {
+    background-color: #0f0;
+  }
+}
+
+.game-repeat {
+  background-color: #fff;
+}
+
+.errors-list {
+  list-style: none;
+  align-self: flex-end;
+  margin: 10px 0;
+
+  &-item {
+    color: #f00;
+  }
+}
