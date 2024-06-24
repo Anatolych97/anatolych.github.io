@@ -4,6 +4,7 @@ import GameBoard from "./views/GameBoard/GameBoard.tsx";
 import GameResult from "./views/GameResult/GameResult.tsx";
 
 import {useState} from "react";
+import './App.scss';
 
 function randomValue(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
@@ -26,9 +27,9 @@ export default function App() {
   const [turns, setTurns] = useState([]);
   const [grid, setGrid] = useState([]);
 
-  const [rowsCount, setRowsCount] = useState(5);
-  const [columnsCount, setColumnsCount] = useState(5);
-  const [colorsCount, setColorsCount] = useState(4);
+  const [rowsCount, setRowsCount] = useState(15);
+  const [columnsCount, setColumnsCount] = useState(15);
+  const [colorsCount, setColorsCount] = useState(10);
 
   function startGame() {
     const colors = createColorsArray(colorsCount);
@@ -115,13 +116,16 @@ export default function App() {
       onAIBot={activateAI}
     />
 
-    <GameBoard
-      colorsGrid={grid}
-      turns={turns}
-      onSelectCell={selectColor}
-    />
+    <div className="game-area">
+      <GameBoard
+        colorsGrid={grid}
+        turns={turns}
+        onSelectCell={selectColor}
+      />
 
-    {!!turns.length && <GameHistory turns={turns}/>}
-    <GameResult/>
+      <GameHistory className="game-history" turns={turns} />
+    </div>
+
+    <GameResult turns={turns} rows={rowsCount} cols={columnsCount}/>
   </>
 }

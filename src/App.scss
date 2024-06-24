@@ -1,0 +1,19 @@
+.game {
+  &-area {
+    display: flex;
+    box-shadow: 2px 2px 30px 5px rgba(0, 0, 0, 0.5);
+    margin: 0 auto;
+    width: 75vw;
+    height: 50vh;
+
+    .game-board {
+      aspect-ratio: 1;
+      flex: 1 1 75%;
+    }
+
+    .game-history-wrapper {
+      grid-column: 10 / 13;
+      flex: 0  25%;
+    }
+  }
+}
