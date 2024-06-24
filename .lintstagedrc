@@ -1,0 +1,7 @@
+{
+   "*.js": "eslint --cache --fix",
+   "*.{scss,css,vue,sass}": "stylelint --fix",
+   "*.ts": "eslint --cache --fix",
+   "*.json": "eslint --cache --fix",
+   "package.json": "sort-package-json"
+}

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible"
+          content="ie=edge">
+    <link rel="stylesheet"
+          href="./main.css">
+    <title>Filler Game</title>
+</head>
+
+<body>
+    <h1 class="title">Fillbot</h1>
+
+    <div class="game">
+        <form action="#"
+              id="gameOptions"
+              class="gameOptions">
+            <p class="gameOptionsElement">
+                <label class="gameOptionsLabel"
+                       for="rows">Row count</label>
+                <input class="gameOptionsInput"
+                       type="number"
+                       id="rows"
+                       name="rows"
+                       value="10"
+                       max="50"
+                       min="3"
+                       required>
+            </p>
+            <p class="gameOptionsElement">
+                <label class="gameOptionsLabel"
+                       for="columns">Column count</label>
+                <input class="gameOptionsInput"
+                       type="number"
+                       id="columns"
+                       name="columns"
+                       value="10"
+                       max="50"
+                       min="3"
+                       required>
+            </p>
+            <p class="gameOptionsElement">
+                <label class="gameOptionsLabel"
+                       for="colors">Color count</label>
+                <input class="gameOptionsInput"
+                       type="number"
+                       id="colors"
+                       name="colors"
+                       value="10"
+                       min="3"
+                       required>
+            </p>
+
+            <p class="gameButtonComplex">
+                <button type="button"
+                        class="gameButton gameOptionsStart"
+                        id="gameStart"
+                        data-auto-game="">Start</button>
+                <button type="button"
+                        class="gameButton gameOptionsAI"
+                        data-auto-game="true"
+                        id="botStart"
+                        disabled>AI</button>
+            </p>
+            <button type="button"
+                    class="gameButton gameRepeat"
+                    data-restart="true"
+                    id="restartButton"
+                    disabled>Restart</button>
+        </form>
+        <div id="gameArea"
+             class="area">
+
+        </div>
+        <div id="gameControls"
+             class="gameControls">
+
+        </div>
+    </div>
+
+    <div id="stepHistory"
+         class="stepHistoryWrapper">
+        <span>Number of steps: <span class="stepCount"></span></span>
+        <ul class="stepHistory">
+        </ul>
+    </div>
+
+    <div class="banerWrapper">
+        <div class="baner">
+            <h3 class="banerTitle"></h3>
+            <p class="banerText"></p>
+            <span class="banerClose">x</span>
+        </div>
+    </div>
+    <script src="./index.js"></script>
+</body>
+
+</html>
