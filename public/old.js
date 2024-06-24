@@ -1,3 +1,4 @@
+/* eslint-disable */
 class Game {
   constructor(options) {
     this.areaWrapper = options.gameArea;
@@ -99,32 +100,8 @@ class Game {
 
   /* ------------------------------ Generate game methods ------------------------------ */
 
-  createColorsArray(colorsCount) {
-    const colors = [];
-    const randColor = function () {
-      return (this.randomValue(0, 255));
-    }.bind(this);
-
-    for (let i = 0; i < colorsCount; i++) {
-      colors.push(`rgb(${ randColor() },${ randColor() },${ randColor() })`);
-    }
-    return colors;
-  }
-
   /* Generates a panel with colors for the user */
-  createControls(colors) {
-    const list = document.createElement('ul'),
-      elem = document.createElement('li');
-    list.classList.add('gameControlsList');
-    elem.classList.add('gameControlsElement');
-    for (let color of colors) {
-      elem.dataset.color = color;
-      elem.style.backgroundColor = color;
-      list.appendChild(elem.cloneNode(true)).addEventListener('click', this.controlClick.bind(this));
-    }
-    list.classList.add('show');
-    this.controlsWrapper.appendChild(list);
-  }
+
 
   /*
       Creates a field map. Initially, all actions are performed on this card.
@@ -148,30 +125,6 @@ class Game {
   }
 
   /* Rendering empty game area without colors */
-  createTable(size) {
-    const $table = document.createElement('table'),
-      row = document.createElement('tr'),
-      cell = document.createElement('td');
-
-    $table.classList.add('table');
-    row.classList.add('row');
-    cell.classList.add('cell');
-    cell.dataset.block = false;
-
-    for (let i = 0; i < size.rows; i++) {
-      $table.appendChild(row.cloneNode());
-      for (let j = 0; j < size.columns; j++) {
-        $table.rows[i].appendChild(cell.cloneNode());
-      }
-    }
-    return $table;
-  }
-
-  /*
-      Field fill function.
-      The only role is to update the tree based on the game map.
-        IMPORTANT: Pure update of colors, no side effects or conditions!
-  */
   updateDomTable(table, map) {
     for (let row of table.rows) {
       for (let cell of row.cells) {
@@ -182,9 +135,6 @@ class Game {
     }
   }
 
-  randomValue(min, max) {
-    return Math.floor(Math.random() * (max - min) + min);
-  }
 
   /* ------------------------------ Main algorythm methods ------------------------------ */
 
@@ -319,22 +269,6 @@ class Game {
       this.updateDomTable(this.table, this.stateMap);
     }
   }
-}
-
-function calculateTheMostOftenColor (stateMap) {
-  const colorsCount = {};
-
-  for (let row of stateMap) {
-    for (let cell of row) {
-      if (colorsCount[cell.color]) {
-        colorsCount[cell.color]++;
-      } else {
-        colorsCount[cell.color] = 1;
-      }
-    }
-  }
-
-  return colorsCount;
 }
 
 const startButton = document.getElementById('gameStart'),

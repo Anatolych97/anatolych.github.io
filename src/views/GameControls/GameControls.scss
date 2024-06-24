@@ -2,16 +2,12 @@
   max-width: 40vw;
 
   &-list {
-    display: none;
+    display: flex;
     flex-flow: row wrap;
     justify-content: center;
     align-items: center;
     margin: 20px;
     list-style: none;
-  }
-
-  &-list.show {
-    display: flex;
   }
 
   &-element {
